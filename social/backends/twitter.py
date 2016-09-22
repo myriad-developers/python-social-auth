@@ -34,8 +34,12 @@ class TwitterOAuth(BaseOAuth1):
 
     def user_data(self, access_token, *args, **kwargs):
         """Return user data provided"""
+        url = 'https://api.twitter.com/1.1/account/verify_credentials.json'
+        if self.setting('INCLUDE_EMAIL', False):
+            url += '?include_email=true'
+
         return self.get_json(
-            'https://api.twitter.com/1.1/account/verify_credentials.json',
+            url,
             params={'include_email': 'true'},
             auth=self.oauth_auth(access_token)
         )
